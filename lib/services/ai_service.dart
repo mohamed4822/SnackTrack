@@ -1,4 +1,4 @@
-import '../models/meal_model.dart';
+import 'package:health_assistant/models/meal_model.dart';
 
 class AIService {
   Future<Meal> analyzeMeal(String input) async {
