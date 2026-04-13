@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:health_assistant/views/ai/ai_coach_screen.dart';
+import 'package:health_assistant/views/ai/weekly_summary_screen.dart';
 import 'core/widgets/bottom_nav_bar.dart';
 import 'views/dashboard/dashboard_screen.dart';
 import 'views/history/meal_history_screen.dart';
