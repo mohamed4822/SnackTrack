@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/ai_controller.dart';
-import '../../core/widgets/custom_button.dart';
-import '../../core/widgets/custom_text_field.dart';
-
-import 'package:flutter/material.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ai_coach_screen.dart
-//
-// Snake AI Coach chat screen.
-// Follows project theme conventions (colorScheme, textTheme, cardColor,
-// dividerColor, brightness checks) — identical pattern to profile_screen.dart
 // ─────────────────────────────────────────────────────────────────────────────
 
 class AiCoachScreen extends StatefulWidget {
@@ -33,124 +25,119 @@ class _AiCoachScreenState extends State<AiCoachScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Scaffold(
-      // bottomNavigationBar: const _BottomNav(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Top Bar
-            // _TopBar(),
-
-            // ── Scrollable chat body
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: const [
-                    SizedBox(height: 24),
-                    _HeroSection(),
-                    SizedBox(height: 28),
-                    _AiMessage(
-                      time: '14:02',
-                      message:
-                          'Analyzing your last 48 hours. Your {metabolic velocity} has increased by 12% following that Zone 2 session. How are your energy levels feeling right now?',
-                    ),
-                    SizedBox(height: 16),
-                    _UserMessage(
-                      time: '14:05',
-                      message:
-                          'Feeling a bit depleted. I think my glycogen levels are low after the morning fast.',
-                    ),
-                    SizedBox(height: 16),
-                    _InsightCard(),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
-
-            // ── Quick prompts + input bar
-            _InputSection(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Top Bar ─────────────────────────────────────────────────────────────────
-class _TopBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final tt     = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Stack(
+    return Scaffold(
+      // ── AppBar: gives back arrow automatically when pushed via GoRouter ────
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: scheme.primary, size: 20),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Row(
+          children: [
+            // Small gradient brain icon
+            Container(
+              width: 28, height: 28,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [scheme.primary, scheme.secondary],
+                ),
+              ),
+              child: const Icon(Icons.psychology_outlined,
+                  color: Colors.white, size: 16),
+            ),
+            const SizedBox(width: 8),
+            RichText(
+              text: TextSpan(
                 children: [
-                  Container(
-                    width: 40, height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: scheme.primary, width: 2),
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/person.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  TextSpan(
+                    text: 'Snake AI ',
+                    style: tt.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w300),
                   ),
-                  Positioned(
-                    bottom: 0, right: 0,
-                    child: Container(
-                      width: 10, height: 10,
-                      decoration: BoxDecoration(
-                        color: scheme.primary,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          width: 1.5,
-                        ),
-                      ),
+                  TextSpan(
+                    text: 'Coach',
+                    style: tt.headlineMedium?.copyWith(
+                      color: scheme.primary,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(width: 10),
-              Text(
-                'SnakeTrack',
-                style: tt.headlineMedium?.copyWith(
-                  color: scheme.primary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-          Stack(
-            children: [
-              Icon(Icons.notifications_outlined,
-                  color: scheme.onSurface.withAlpha(150), size: 24),
-              Positioned(
-                right: 0, top: 0,
-                child: Container(
-                  width: 8, height: 8,
+            ),
+          ],
+        ),
+        actions: [
+          // LIVE badge
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: scheme.primary.withAlpha(30),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: scheme.primary.withAlpha(100)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 6, height: 6,
                   decoration: BoxDecoration(
                     color: scheme.primary,
                     shape: BoxShape.circle,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 5),
+                Text(
+                  'LIVE',
+                  style: tt.labelSmall?.copyWith(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ],
+            ),
           ),
+        ],
+      ),
+
+      body: Column(
+        children: [
+          // ── Scrollable chat body
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: const [
+                  SizedBox(height: 24),
+                  _HeroSection(),
+                  SizedBox(height: 28),
+                  _AiMessage(
+                    time: '14:02',
+                    message:
+                        'Analyzing your last 48 hours. Your {metabolic velocity} has increased by 12% following that Zone 2 session. How are your energy levels feeling right now?',
+                  ),
+                  SizedBox(height: 16),
+                  _UserMessage(
+                    time: '14:05',
+                    message:
+                        'Feeling a bit depleted. I think my glycogen levels are low after the morning fast.',
+                  ),
+                  SizedBox(height: 16),
+                  _InsightCard(),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Quick prompts + input bar
+          _InputSection(),
         ],
       ),
     );
@@ -168,76 +155,30 @@ class _HeroSection extends StatelessWidget {
 
     return Column(
       children: [
-        // Avatar with gradient ring + LIVE badge
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Container(
-              width: 100, height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    scheme.primary.withAlpha(200),
-                    scheme.secondary.withAlpha(200),
-                  ],
-                ),
-              ),
-              padding: const EdgeInsets.all(3),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).cardColor,
-                ),
-                child: Icon(
-                  Icons.psychology_outlined,
-                  color: scheme.primary,
-                  size: 44,
-                ),
-              ),
+        Container(
+          width: 90, height: 90,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end:   Alignment.bottomRight,
+              colors: [
+                scheme.primary.withAlpha(200),
+                scheme.secondary.withAlpha(200),
+              ],
             ),
-            Positioned(
-              bottom: -2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                decoration: BoxDecoration(
-                  color: scheme.primary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'LIVE',
-                  style: tt.labelSmall?.copyWith(
-                    color: scheme.onPrimary,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
+          ),
+          padding: const EdgeInsets.all(3),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Theme.of(context).cardColor,
             ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Snake AI ',
-                style: tt.displayLarge?.copyWith(fontWeight: FontWeight.w300),
-              ),
-              TextSpan(
-                text: 'Coach',
-                style: tt.displayLarge?.copyWith(
-                  color: scheme.primary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+            child: Icon(Icons.psychology_outlined,
+                color: scheme.primary, size: 40),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Text(
           'Your digital oracle for metabolic precision. Analyzing\nreal-time performance and nutritional velocity.',
           textAlign: TextAlign.center,
@@ -254,7 +195,7 @@ class _HeroSection extends StatelessWidget {
 // ─── AI Message Bubble ────────────────────────────────────────────────────────
 class _AiMessage extends StatelessWidget {
   final String time;
-  final String message; // wrap {highlighted} in curly braces
+  final String message;
 
   const _AiMessage({required this.time, required this.message});
 
@@ -267,7 +208,6 @@ class _AiMessage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label row
         Row(
           children: [
             Text(
@@ -283,7 +223,6 @@ class _AiMessage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        // Bubble
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -294,9 +233,7 @@ class _AiMessage extends StatelessWidget {
               bottomLeft:  Radius.circular(16),
               bottomRight: Radius.circular(16),
             ),
-            border: Border(
-              left: BorderSide(color: scheme.primary, width: 3),
-            ),
+            border: Border(left: BorderSide(color: scheme.primary, width: 3)),
             boxShadow: isDark
                 ? null
                 : [BoxShadow(color: Colors.black.withAlpha(15), blurRadius: 6)],
@@ -359,9 +296,8 @@ class _UserMessage extends StatelessWidget {
               bottomLeft:  Radius.circular(16),
               bottomRight: Radius.circular(16),
             ),
-            border: Border(
-              right: BorderSide(color: scheme.secondary, width: 3),
-            ),
+            border:
+                Border(right: BorderSide(color: scheme.secondary, width: 3)),
           ),
           child: Text(message, style: tt.bodyLarge),
         ),
@@ -384,9 +320,7 @@ class _InsightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border(
-          left: BorderSide(color: scheme.primary, width: 3),
-        ),
+        border: Border(left: BorderSide(color: scheme.primary, width: 3)),
         boxShadow: isDark
             ? null
             : [BoxShadow(color: Colors.black.withAlpha(15), blurRadius: 8)],
@@ -394,7 +328,6 @@ class _InsightCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
             child: Text(
@@ -406,11 +339,11 @@ class _InsightCard extends StatelessWidget {
               ),
             ),
           ),
-          // Body text
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
             child: _HighlightedText(
-              raw: 'Correct assessment. Your biometric feedback indicates a {glucose dip}. Recommended adjustment:',
+              raw:
+                  'Correct assessment. Your biometric feedback indicates a {glucose dip}. Recommended adjustment:',
               baseStyle: tt.bodyLarge!,
               highlightStyle: tt.bodyLarge!.copyWith(
                 color: scheme.primary,
@@ -419,7 +352,6 @@ class _InsightCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // Optimal intake sub-card
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Container(
@@ -462,7 +394,6 @@ class _InsightCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          // Recovery bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -477,9 +408,8 @@ class _InsightCard extends StatelessWidget {
                     ),
                     Text(
                       '88%',
-                      style: tt.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: tt.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -490,7 +420,8 @@ class _InsightCard extends StatelessWidget {
                     value: 0.88,
                     minHeight: 6,
                     backgroundColor: scheme.primary.withAlpha(30),
-                    valueColor: AlwaysStoppedAnimation<Color>(scheme.primary),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(scheme.primary),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -514,16 +445,15 @@ class _InputSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final tt     = Theme.of(context).textTheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
+        border:
+            Border(top: BorderSide(color: Theme.of(context).dividerColor)),
       ),
       child: Column(
         children: [
-          // Quick prompt chips
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: SingleChildScrollView(
@@ -537,7 +467,6 @@ class _InputSection extends StatelessWidget {
               ),
             ),
           ),
-          // Text field row
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
             child: Row(
@@ -568,11 +497,8 @@ class _InputSection extends StatelessWidget {
                     color: scheme.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.arrow_forward_rounded,
-                    color: scheme.onPrimary,
-                    size: 20,
-                  ),
+                  child: Icon(Icons.arrow_forward_rounded,
+                      color: scheme.onPrimary, size: 20),
                 ),
               ],
             ),
@@ -598,7 +524,8 @@ class _QuickChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         onTap: () {},
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: scheme.primary.withAlpha(100)),
@@ -614,70 +541,7 @@ class _QuickChip extends StatelessWidget {
   }
 }
 
-// ─── Bottom Nav ───────────────────────────────────────────────────────────────
-class _BottomNav extends StatelessWidget {
-  const _BottomNav();
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
-    return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavItem(icon: Icons.grid_view,         active: false, activeColor: scheme.primary),
-          _NavItem(icon: Icons.history,            active: false, activeColor: scheme.primary),
-          _NavItem(icon: Icons.add_circle_outline, active: false, activeColor: scheme.primary),
-          _NavItem(icon: Icons.psychology_outlined,active: true,  activeColor: scheme.primary),
-          _NavItem(icon: Icons.person_outline,     active: false, activeColor: scheme.primary),
-        ],
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final bool     active;
-  final Color    activeColor;
-
-  const _NavItem({
-    required this.icon,
-    required this.active,
-    required this.activeColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: active
-              ? activeColor
-              : Theme.of(context).colorScheme.onSurface.withAlpha(100),
-          size: 22,
-        ),
-        if (active)
-          Container(
-            width: 4, height: 4,
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(color: activeColor, shape: BoxShape.circle),
-          ),
-      ],
-    );
-  }
-}
-
-// ─── Utility: highlighted text parser ────────────────────────────────────────
-// Wraps {text} in the highlight style, everything else in baseStyle.
+// ─── Highlighted text parser ──────────────────────────────────────────────────
 class _HighlightedText extends StatelessWidget {
   final String    raw;
   final TextStyle baseStyle;
@@ -696,7 +560,8 @@ class _HighlightedText extends StatelessWidget {
     int last = 0;
     for (final match in regex.allMatches(raw)) {
       if (match.start > last) {
-        spans.add(TextSpan(text: raw.substring(last, match.start), style: baseStyle));
+        spans.add(TextSpan(
+            text: raw.substring(last, match.start), style: baseStyle));
       }
       spans.add(TextSpan(text: match.group(1), style: highlightStyle));
       last = match.end;
