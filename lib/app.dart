@@ -8,6 +8,7 @@ import 'controllers/meal_controller.dart';
 import 'controllers/dashboard_controller.dart';
 import 'controllers/ai_controller.dart';
 import 'controllers/profile_controller.dart';
+import 'controllers/history_controller.dart';
 import 'core/network/dio_client.dart';
 import 'services/auth_service.dart';
 import 'services/meal_service.dart';
@@ -15,6 +16,7 @@ import 'services/ai_service.dart';
 import 'views/splash/splash_screen.dart';
 import 'views/auth/auth_screen.dart';
 import 'views/ai/ai_coach_screen.dart';
+import 'views/meal_logging/meal_analysis_screen.dart';
 import 'main_screen.dart';
 
 class App extends StatelessWidget {
@@ -34,6 +36,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController(mealService)),
         ChangeNotifierProvider(create: (_) => AiController(aiService)),
         ChangeNotifierProvider(create: (_) => ProfileController()),
+        ChangeNotifierProvider(create: (_) => HistoryController(mealService)),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -61,5 +64,12 @@ final _router = GoRouter(
       builder: (_, __) => const MainScreen(initialIndex: 4),
     ),
     GoRoute(path: AppRoutes.aiCoach, builder: (_, __) => const AiCoachScreen()), // <── AI Coach
+      path: AppRoutes.mealHistory,
+      builder: (_, __) => const MainScreen(initialIndex: 1),
+    ),
+    GoRoute(
+      path: AppRoutes.analysis,
+      builder: (_, __) => const MealAnalysisScreen(),
+    ),
   ],
 );

@@ -10,15 +10,21 @@ import 'views/reports/weekly_report_screen.dart';
 import 'views/profile/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, required int initialIndex});
+  final int initialIndex;
+  const MainScreen({super.key, required this.initialIndex});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
-  NavItem _current = NavItem.dashboard;
+class _MainScreenState extends State<MainScreen> {
+  late NavItem _current;
+
+  @override
+  void initState() {
+    super.initState();
+    _current = NavItem.values[widget.initialIndex];
+  }
 
   // Animation controller for the FAB pulse effect
   late final AnimationController _fabPulse;
@@ -44,12 +50,12 @@ class _MainScreenState extends State<MainScreen>
   }
 
   Widget get _screen => switch (_current) {
-        NavItem.dashboard => const DashboardScreen(),
-        NavItem.history   => const MealHistoryScreen(),
-        NavItem.addMeal   => const AddMealScreen(),
-        NavItem.reports   => const WeeklyReportScreen(),
-        NavItem.profile   => const ProfileScreen(),
-      };
+    NavItem.dashboard => const DashboardScreen(),
+    NavItem.history => const MealHistoryScreen(),
+    NavItem.addMeal => const AddMealScreen(),
+    NavItem.reports => const WeeklyReportScreen(),
+    NavItem.profile => const ProfileScreen(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +70,15 @@ class _MainScreenState extends State<MainScreen>
               image: AssetImage("assets/images/person.png"),
               fit: BoxFit.fill,
             ),
-            color: scheme.primaryContainer,
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
         ),
         title: Text(
           'SnakeTrack',
-          style: tt.displayMedium?.copyWith(color: Theme.of(context).primaryColor),
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         actions: [
           IconButton(
