@@ -36,7 +36,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title:       'ScnakTrack',
+        title:       'SnackTrack',
         theme:       AppTheme.light,
         darkTheme:   AppTheme.dark,
         themeMode:   ThemeMode.system,

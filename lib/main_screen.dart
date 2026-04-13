@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           // child: Image.asset("assets/images/logo.png", width: 20)
           ),
-        title: Text('ScnakTrack' , 
+        title: Text('SnackTrack' , 
         style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Theme.of(context).primaryColor)),
         actions: [
           IconButton(
