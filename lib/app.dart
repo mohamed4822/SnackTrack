@@ -15,6 +15,7 @@ import 'services/meal_service.dart';
 import 'services/ai_service.dart';
 import 'views/splash/splash_screen.dart';
 import 'views/auth/auth_screen.dart';
+import 'views/ai/ai_coach_screen.dart';
 import 'views/meal_logging/meal_analysis_screen.dart';
 import 'main_screen.dart';
 
@@ -59,12 +60,12 @@ final _router = GoRouter(
       builder: (_, __) => const MainScreen(initialIndex: 0),
     ),
     GoRoute(
-      path: AppRoutes.mealHistory,
-      builder: (_, __) => const MainScreen(initialIndex: 1),
-    ),
-    GoRoute(
       path: AppRoutes.profile,
       builder: (_, __) => const MainScreen(initialIndex: 4),
+    ),
+    GoRoute(path: AppRoutes.aiCoach, builder: (_, __) => const AiCoachScreen()), // <── AI Coach
+      path: AppRoutes.mealHistory,
+      builder: (_, __) => const MainScreen(initialIndex: 1),
     ),
     GoRoute(
       path: AppRoutes.analysis,
