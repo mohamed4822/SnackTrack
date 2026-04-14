@@ -64,6 +64,7 @@ final _router = GoRouter(
       builder: (_, __) => const MainScreen(initialIndex: 4),
     ),
     GoRoute(path: AppRoutes.aiCoach, builder: (_, __) => const AiCoachScreen()), // <── AI Coach
+    GoRoute(
       path: AppRoutes.mealHistory,
       builder: (_, __) => const MainScreen(initialIndex: 1),
     ),
