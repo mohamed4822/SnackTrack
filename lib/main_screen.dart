@@ -17,33 +17,52 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget get _screen => switch (_current) {
     NavItem.dashboard => const DashboardScreen(),
-    NavItem.history   => const MealHistoryScreen(),
-    NavItem.addMeal   => const AddMealScreen(),
-    NavItem.reports   => const WeeklyReportScreen(),
-    NavItem.profile   => const ProfileScreen(),
+    NavItem.history => const MealHistoryScreen(),
+    NavItem.addMeal => const AddMealScreen(),
+    NavItem.reports => const WeeklyReportScreen(),
+    NavItem.profile => const ProfileScreen(),
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(
+          context,
+        ).scaffoldBackgroundColor, 
+        elevation: 0,
+        scrolledUnderElevation: 0, 
         leading: Container(
-          margin: const EdgeInsets.only(left: 12 ,top: 8, bottom: 8),
+          margin: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
           decoration: BoxDecoration(
-            image: const DecorationImage(image: AssetImage("assets/images/person.png"), fit: BoxFit.fill),
+            image: const DecorationImage(
+              image: AssetImage("assets/images/person.png"),
+              fit: BoxFit.fill,
+            ),
             color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
-          // child: Image.asset("assets/images/logo.png", width: 20)
+        ),
+        title: Text(
+          'SnakeTrack',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: Theme.of(
+              context,
+            ).colorScheme.primary, 
+            fontWeight: FontWeight.bold,
           ),
-        title: Text('ScnakTrack' , 
-        style: Theme.of(context).textTheme.displayMedium?.copyWith(color: Theme.of(context).primaryColor)),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none_outlined),
-            onPressed: () { },
+            icon: Icon(
+              Icons.notifications_none_outlined,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface,
+            ),
+            onPressed: () {},
           ),
-          SizedBox(width: 10,)
+          const SizedBox(width: 10),
         ],
       ),
       body: _screen,

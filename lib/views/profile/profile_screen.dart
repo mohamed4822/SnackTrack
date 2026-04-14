@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:health_assistant/views/settings/privacy_screen.dart';
+import 'package:health_assistant/views/settings/support_screen.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/profile_controller.dart';
 import '../../controllers/auth_controller.dart';
+import '../settings/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -9,17 +12,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = context.watch<ProfileController>().profile;
-    final auth    = context.read<AuthController>();
-    final scheme  = Theme.of(context).colorScheme;
-    final tt      = Theme.of(context).textTheme;
-    final isDark  = Theme.of(context).brightness == Brightness.dark;
+    final auth = context.read<AuthController>();
+    final scheme = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           children: [
-
             // ── Avatar ──────────────────────────────────────────────────────
             Center(
               child: SizedBox(
@@ -29,14 +31,16 @@ class ProfileScreen extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      width: 120, height: 120,
+                      width: 120,
+                      height: 120,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
                         border: Border.all(color: scheme.primary, width: 2),
                       ),
                     ),
                     Container(
-                      width: 112, height: 112,
+                      width: 112,
+                      height: 112,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: Colors.white,
@@ -46,14 +50,18 @@ class ProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                       child: Image.asset(
                         'assets/images/person.png',
-                        width: 104, height: 104,
+                        width: 104,
+                        height: 104,
                         fit: BoxFit.cover,
                       ),
                     ),
                     Positioned(
                       bottom: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: scheme.secondary,
                           borderRadius: BorderRadius.circular(20),
@@ -86,7 +94,9 @@ class ProfileScreen extends StatelessWidget {
             Center(
               child: Text(
                 profile?.bio ?? 'Professional Herpetologist',
-                style: tt.bodySmall?.copyWith(color: scheme.onSurface.withAlpha(128)),
+                style: tt.bodySmall?.copyWith(
+                  color: scheme.onSurface.withAlpha(128),
+                ),
               ),
             ),
 
@@ -95,9 +105,9 @@ class ProfileScreen extends StatelessWidget {
             // ── Stats row — IntrinsicHeight makes both cards equal height ────
             IntrinsicHeight(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch, // ← stretch to tallest
+                crossAxisAlignment:
+                    CrossAxisAlignment.stretch, // ← stretch to tallest
                 children: [
-
                   // Active Streak
                   Expanded(
                     child: _StatCard(
@@ -126,16 +136,20 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Row(
-                            children: List.generate(5, (i) => Container(
-                              margin: const EdgeInsets.only(right: 4),
-                              width: 20, height: 4,
-                              decoration: BoxDecoration(
-                                color: i < 3
-                                    ? scheme.primary
-                                    : scheme.primary.withAlpha(50),
-                                borderRadius: BorderRadius.circular(2),
+                            children: List.generate(
+                              5,
+                              (i) => Container(
+                                margin: const EdgeInsets.only(right: 4),
+                                width: 20,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  color: i < 3
+                                      ? scheme.primary
+                                      : scheme.primary.withAlpha(50),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
                               ),
-                            )),
+                            ),
                           ),
                         ],
                       ),
@@ -200,27 +214,30 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.settings_outlined,
               label: 'Settings',
               iconColor: scheme.primary,
-              onTap: () {
-                // TODO: navigate to settings screen
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AppSettingsScreen()),
+              ),
             ),
             const SizedBox(height: 10),
             _MenuItem(
               icon: Icons.shield_outlined,
               label: 'Privacy',
               iconColor: scheme.secondary,
-              onTap: () {
-                // TODO: navigate to privacy screen
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const DataPrivacyScreen()),
+              ),
             ),
             const SizedBox(height: 10),
             _MenuItem(
               icon: Icons.help_outline_rounded,
               label: 'Support',
               iconColor: scheme.primary,
-              onTap: () {
-                // TODO: navigate to support screen
-              },
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SupportScreen()),
+              ),
             ),
 
             const SizedBox(height: 32),
@@ -228,15 +245,24 @@ class ProfileScreen extends StatelessWidget {
             // ── Logout ───────────────────────────────────────────────────────
             OutlinedButton.icon(
               onPressed: auth.logout,
-              icon: const Icon(Icons.logout_rounded, color: Colors.red, size: 20),
+              icon: const Icon(
+                Icons.logout_rounded,
+                color: Colors.red,
+                size: 20,
+              ),
               label: const Text(
                 'Logout',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red, width: 1),
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
             ),
 
@@ -250,17 +276,17 @@ class ProfileScreen extends StatelessWidget {
 
 // ── Stat card ──────────────────────────────────────────────────────────────────
 class _StatCard extends StatelessWidget {
-  final String  label;
-  final Color   labelColor;
-  final Widget  child;
-  final bool    hasBorder;
-  final Color?  borderColor;
+  final String label;
+  final Color labelColor;
+  final Widget child;
+  final bool hasBorder;
+  final Color? borderColor;
 
   const _StatCard({
     required this.label,
     required this.labelColor,
     required this.child,
-    this.hasBorder   = false,
+    this.hasBorder = false,
     this.borderColor,
   });
 
@@ -275,13 +301,15 @@ class _StatCard extends StatelessWidget {
         border: hasBorder
             ? Border.all(color: borderColor ?? Colors.transparent, width: 1.5)
             : null,
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withAlpha(20),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withAlpha(20),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,9 +332,9 @@ class _StatCard extends StatelessWidget {
 
 // ── Menu item — Material + InkWell for reliable tap ───────────────────────────
 class _MenuItem extends StatelessWidget {
-  final IconData     icon;
-  final String       label;
-  final Color        iconColor;
+  final IconData icon;
+  final String label;
+  final Color iconColor;
   final VoidCallback onTap;
 
   const _MenuItem({
@@ -319,10 +347,12 @@ class _MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Material(                              // ← Material needed for InkWell
+    return Material(
+      // ← Material needed for InkWell
       color: isDark ? const Color(0xFF1A2236) : Colors.white,
       borderRadius: BorderRadius.circular(14),
-      child: InkWell(                             // ← InkWell is reliably tappable
+      child: InkWell(
+        // ← InkWell is reliably tappable
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Padding(
@@ -334,9 +364,9 @@ class _MenuItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
               Icon(

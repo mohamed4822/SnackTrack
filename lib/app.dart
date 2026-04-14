@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:health_assistant/controllers/setting_controller.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/app_routes.dart';
 import 'core/theme/app_theme.dart';
@@ -33,14 +34,17 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController(mealService)),
         ChangeNotifierProvider(create: (_) => AiController(aiService)),
         ChangeNotifierProvider(create: (_) => ProfileController()),
+        ChangeNotifierProvider(create: (_) => SettingsController()),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title:       'ScnakTrack',
-        theme:       AppTheme.light,
-        darkTheme:   AppTheme.dark,
-        themeMode:   ThemeMode.system,
-        routerConfig: _router,
+      child: Consumer<SettingsController>(
+        builder: (context, settings, _) => MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title:        'NutriFit AI',
+          theme:        AppTheme.light,
+          darkTheme:    AppTheme.dark,
+          themeMode:    settings.isDarkMode ? ThemeMode.dark : ThemeMode.light, // ← THIS
+          routerConfig: _router,
+        )
       ),
     );
   }
