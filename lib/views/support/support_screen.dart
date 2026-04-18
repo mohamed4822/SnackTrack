@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:health_assistant/views/support/widgets/knowledge_title.dart';
+import 'package:health_assistant/views/support/widgets/video_card.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -130,7 +132,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withAlpha(70),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -172,7 +174,7 @@ class _SupportScreenState extends State<SupportScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withAlpha(70),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -224,14 +226,14 @@ class _SupportScreenState extends State<SupportScreen> {
               child: Text(
                 'Explore categories to find detailed documentation',
                 style: tt.bodySmall?.copyWith(
-                    color: scheme.onSurface.withOpacity(0.5)),
+                    color: scheme.onSurface.withAlpha(120)),
               ),
             ),
 
             const SizedBox(height: 16),
 
             // Knowledge items
-            ..._knowledgeBase.map((item) => _KnowledgeTile(
+            ..._knowledgeBase.map((item) => KnowledgeTile(
                   icon: item['icon'] as IconData,
                   iconColor: item['color'] as Color,
                   title: item['title'] as String,
@@ -284,7 +286,7 @@ class _SupportScreenState extends State<SupportScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withAlpha(30),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -305,7 +307,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   ),
                   const SizedBox(height: 20),
                   // Video cards
-                  ..._videos.map((v) => _VideoCard(
+                  ..._videos.map((v) => VideoCard(
                         title: v['title'] as String,
                         subtitle: v['subtitle'] as String,
                         duration: v['duration'] as String,
@@ -326,12 +328,12 @@ class _SupportScreenState extends State<SupportScreen> {
                 color: isDark ? const Color(0xFF1A2236) : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: scheme.onSurface.withOpacity(0.08),
+                  color: scheme.onSurface.withAlpha(50),
                   width: 1,
                 ),
                 boxShadow: isDark ? null : [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withAlpha(100),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -348,7 +350,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   Text(
                     'Our expert support team is available 24/7 to help you with any technical challenges or account questions.',
                     style: tt.bodySmall?.copyWith(
-                        color: scheme.onSurface.withOpacity(0.5),
+                        color: scheme.onSurface.withAlpha(120),
                         height: 1.5),
                   ),
                   const SizedBox(height: 16),
@@ -393,7 +395,7 @@ class _SupportScreenState extends State<SupportScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: scheme.onSurface.withOpacity(0.15),
+                            color: scheme.onSurface.withAlpha(120),
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -422,7 +424,7 @@ class _SupportScreenState extends State<SupportScreen> {
                 color: isDark ? const Color(0xFF1A2236) : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: scheme.onSurface.withOpacity(0.08),
+                  color: scheme.onSurface.withAlpha(50),
                 ),
               ),
               child: Column(
@@ -437,9 +439,9 @@ class _SupportScreenState extends State<SupportScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Connect with other NutriFit users, share tips, and get inspired by successful workflows.',
+                    'Connect with other SnackTrack users, share tips, and get inspired by successful workflows.',
                     style: tt.bodySmall?.copyWith(
-                        color: scheme.onSurface.withOpacity(0.5),
+                        color: scheme.onSurface.withAlpha(120),
                         height: 1.5),
                   ),
                   const SizedBox(height: 14),
@@ -465,172 +467,6 @@ class _SupportScreenState extends State<SupportScreen> {
             ),
 
             const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Knowledge tile ─────────────────────────────────────────────────────────────
-class _KnowledgeTile extends StatelessWidget {
-  final IconData icon;
-  final Color    iconColor;
-  final String   title;
-  final String   subtitle;
-  final bool     isDark;
-  final VoidCallback onTap;
-
-  const _KnowledgeTile({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.subtitle,
-    required this.isDark,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 44, height: 44,
-                  decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: iconColor, size: 22),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title,
-                          style: tt.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 3),
-                      Text(subtitle,
-                          style: tt.bodySmall?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.5),
-                            height: 1.4,
-                          )),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right_rounded,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withOpacity(0.3),
-                    size: 20),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Video card ─────────────────────────────────────────────────────────────────
-class _VideoCard extends StatelessWidget {
-  final String   title;
-  final String   subtitle;
-  final String   duration;
-  final Color    bgColor;
-  final VoidCallback onTap;
-
-  const _VideoCard({
-    required this.title,
-    required this.subtitle,
-    required this.duration,
-    required this.bgColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thumbnail area
-            Stack(
-              children: [
-                Container(
-                  height: 130,
-                  decoration: BoxDecoration(
-                    color: bgColor.withOpacity(0.8),
-                    borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(14)),
-                  ),
-                  child: Center(
-                    child: Icon(Icons.play_circle_filled_rounded,
-                        color: Colors.white.withOpacity(0.4), size: 48),
-                  ),
-                ),
-                // Duration badge
-                Positioned(
-                  bottom: 8, right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      duration,
-                      style: tt.labelSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Text
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      style: tt.bodyMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  const SizedBox(height: 4),
-                  Text(subtitle,
-                      style: tt.bodySmall?.copyWith(
-                          color: Colors.white54, height: 1.4)),
-                ],
-              ),
-            ),
           ],
         ),
       ),

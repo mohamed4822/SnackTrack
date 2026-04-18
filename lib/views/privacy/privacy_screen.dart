@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:health_assistant/core/widgets/divider.dart';
+import 'package:health_assistant/views/privacy/widgets/badge.dart';
+import 'package:health_assistant/views/privacy/widgets/certification_badge.dart';
+import 'package:health_assistant/views/privacy/widgets/control_card.dart';
+import 'package:health_assistant/views/privacy/widgets/export_button.dart';
+import 'package:health_assistant/views/privacy/widgets/toggle_title.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller.dart';
 
@@ -82,12 +88,12 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      _Badge(
+                      PrivBadge(
                         icon: Icons.shield_outlined,
                         label: 'AES-256 ENCRYPTED',
                         color: scheme.primary,
                       ),
-                      _Badge(
+                      PrivBadge(
                         icon: Icons.lock_outline_rounded,
                         label: 'GDPR COMPLIANT',
                         color: scheme.secondary,
@@ -120,11 +126,11 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
 
             const SizedBox(height: 12),
 
-            _ControlCard(
+            ControlCard(
               isDark: isDark,
               child: Column(
                 children: [
-                  _ToggleTile(
+                  ToggleTile(
                     icon: Icons.visibility_off_outlined,
                     iconColor: scheme.primary,
                     title: 'Anonymous Analytics',
@@ -135,8 +141,8 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                         setState(() => _anonymousAnalytics = v),
                     isDark: isDark,
                   ),
-                  _CardDivider(isDark: isDark),
-                  _ToggleTile(
+                  AppDivider(isDark: isDark),
+                  ToggleTile(
                     icon: Icons.gps_fixed_rounded,
                     iconColor: scheme.secondary,
                     title: 'Precision Geo-Tracking',
@@ -147,8 +153,8 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                         setState(() => _geoTracking = v),
                     isDark: isDark,
                   ),
-                  _CardDivider(isDark: isDark),
-                  _ToggleTile(
+                  AppDivider(isDark: isDark),
+                  ToggleTile(
                     icon: Icons.psychology_outlined,
                     iconColor: scheme.primary,
                     title: 'AI Training Model',
@@ -169,7 +175,7 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
             Text(
               'SECURITY CERTIFICATION',
               style: tt.labelSmall?.copyWith(
-                color: scheme.onSurface.withOpacity(0.4),
+                color: scheme.onSurface.withAlpha(120),
                 letterSpacing: 1.2,
                 fontWeight: FontWeight.w600,
               ),
@@ -178,10 +184,10 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
-                _CertBadge(icon: Icons.verified_user_outlined,  label: 'ISO 27001'),
-                _CertBadge(icon: Icons.health_and_safety_outlined, label: 'HIPAA READY'),
-                _CertBadge(icon: Icons.security_outlined,       label: 'SOC 2 TYPE II'),
-                _CertBadge(icon: Icons.shield_outlined,         label: '256-BIT'),
+                CertBadge(icon: Icons.verified_user_outlined,  label: 'ISO 27001'),
+                CertBadge(icon: Icons.health_and_safety_outlined, label: 'HIPAA READY'),
+                CertBadge(icon: Icons.security_outlined,       label: 'SOC 2 TYPE II'),
+                CertBadge(icon: Icons.shield_outlined,         label: '256-BIT'),
               ],
             ),
 
@@ -193,7 +199,7 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                     tt.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
 
-            _ControlCard(
+            ControlCard(
               isDark: isDark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,14 +212,14 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                     'Request a complete archive of your biometric, nutritional, and workout history.',
                     style: tt.bodySmall?.copyWith(
                         color:
-                            scheme.onSurface.withOpacity(0.5),
+                            scheme.onSurface.withAlpha(120),
                         height: 1.5),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
-                        child: _ExportButton(
+                        child: ExportButton(
                           icon: Icons.code_rounded,
                           label: 'JSON',
                           isDark: isDark,
@@ -222,7 +228,7 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _ExportButton(
+                        child: ExportButton(
                           icon: Icons.grid_on_rounded,
                           label: 'CSV',
                           isDark: isDark,
@@ -247,9 +253,9 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
             ),
             const SizedBox(height: 12),
 
-            _ControlCard(
+            ControlCard(
               isDark: isDark,
-              borderColor: Colors.red.withOpacity(0.3),
+              borderColor: Colors.red.withAlpha(120),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -261,14 +267,14 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                     'Once deleted, your data cannot be recovered. This action is permanent and immediate.',
                     style: tt.bodySmall?.copyWith(
                         color:
-                            scheme.onSurface.withOpacity(0.5),
+                            scheme.onSurface.withAlpha(120),
                         height: 1.5),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: Material(
-                      color: Colors.red.withOpacity(0.15),
+                      color: Colors.red.withAlpha(30),
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         onTap: () => _showDeleteDialog(context),
@@ -301,13 +307,13 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
               children: [
                 Icon(Icons.info_outline_rounded,
                     size: 14,
-                    color: scheme.onSurface.withOpacity(0.35)),
+                    color: scheme.onSurface.withAlpha(120)),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'NutriFit uses decentralized encryption keys. Our staff cannot access your raw biometric logs even if requested. Your privacy is mathematically guaranteed.',
+                    'SnackTrack uses decentralized encryption keys. Our staff cannot access your raw biometric logs even if requested. Your privacy is mathematically guaranteed.',
                     style: tt.bodySmall?.copyWith(
-                      color: scheme.onSurface.withOpacity(0.35),
+                      color: scheme.onSurface.withAlpha(120),
                       height: 1.6,
                     ),
                   ),
@@ -350,223 +356,6 @@ class _DataPrivacyScreenState extends State<DataPrivacyScreen> {
                     color: Colors.red, fontWeight: FontWeight.bold)),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ── Badge ──────────────────────────────────────────────────────────────────────
-class _Badge extends StatelessWidget {
-  final IconData icon;
-  final String   label;
-  final Color    color;
-  const _Badge({required this.icon, required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.8,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Control card ───────────────────────────────────────────────────────────────
-class _ControlCard extends StatelessWidget {
-  final Widget child;
-  final bool   isDark;
-  final Color? borderColor;
-  const _ControlCard(
-      {required this.child, required this.isDark, this.borderColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A2236) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: borderColor != null
-            ? Border.all(color: borderColor!, width: 1)
-            : null,
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2))
-              ],
-      ),
-      child: child,
-    );
-  }
-}
-
-// ── Toggle tile ────────────────────────────────────────────────────────────────
-class _ToggleTile extends StatelessWidget {
-  final IconData icon;
-  final Color    iconColor;
-  final String   title;
-  final String   subtitle;
-  final bool     value;
-  final bool     isDark;
-  final ValueChanged<bool> onChanged;
-  const _ToggleTile(
-      {required this.icon,
-      required this.iconColor,
-      required this.title,
-      required this.subtitle,
-      required this.value,
-      required this.onChanged,
-      required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    final scheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Container(
-            width: 38, height: 38,
-            decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: iconColor, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: tt.bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600)),
-                const SizedBox(height: 2),
-                Text(subtitle,
-                    style: tt.bodySmall?.copyWith(
-                        color: scheme.onSurface.withOpacity(0.45),
-                        height: 1.4)),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeColor: scheme.primary,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Card divider ───────────────────────────────────────────────────────────────
-class _CardDivider extends StatelessWidget {
-  final bool isDark;
-  const _CardDivider({required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      height: 1,
-      color: isDark
-          ? Colors.white.withOpacity(0.06)
-          : Colors.black.withOpacity(0.06),
-    );
-  }
-}
-
-// ── Certification badge ────────────────────────────────────────────────────────
-class _CertBadge extends StatelessWidget {
-  final IconData icon;
-  final String   label;
-  const _CertBadge({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Column(
-      children: [
-        Icon(icon, color: scheme.onSurface.withOpacity(0.5), size: 26),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: scheme.onSurface.withOpacity(0.4),
-            fontSize: 9,
-            letterSpacing: 0.5,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-// ── Export button ──────────────────────────────────────────────────────────────
-class _ExportButton extends StatelessWidget {
-  final IconData icon;
-  final String   label;
-  final bool     isDark;
-  final VoidCallback onTap;
-  const _ExportButton(
-      {required this.icon,
-      required this.label,
-      required this.isDark,
-      required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: isDark ? const Color(0xFF0F1629) : const Color(0xFFF4F4F4),
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Column(
-            children: [
-              Icon(icon, color: scheme.primary, size: 22),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: scheme.onSurface,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

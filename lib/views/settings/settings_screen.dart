@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:health_assistant/core/widgets/custom_button.dart';
+import 'package:health_assistant/views/settings/widgets/account_title.dart';
+import 'package:health_assistant/core/widgets/divider.dart';
+import 'package:health_assistant/views/settings/widgets/section_card_wrapper.dart';
+import 'package:health_assistant/views/settings/widgets/section_header.dart';
+import 'package:health_assistant/views/settings/widgets/theme_toggle_button.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/setting_controller.dart';
@@ -22,7 +28,7 @@ class AppSettingsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           children: [
-            // Replace your AppBar row with this:
+            // Custom AppBar 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,7 +69,7 @@ class AppSettingsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             // ── Premium card ──────────────────────────────────────────────────
             Container(
               width: double.infinity,
@@ -95,7 +101,7 @@ class AppSettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'NutriFit AI Plus\nMember',
+                    'SnackTrack Plus\nMember',
                     style: tt.headlineLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -111,26 +117,12 @@ class AppSettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  OutlinedButton(
+                  CustomButton(
+                    label: 'Manage Subscription', 
                     onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.white54, width: 1),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                    outlined: true,
+                    color: Colors.white70,
                     ),
-                    child: Text(
-                      'Manage Subscription',
-                      style: tt.labelMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -138,12 +130,12 @@ class AppSettingsScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             // ── Appearance card ───────────────────────────────────────────────
-            _SectionCard(
+            SectionCard(
               isDark: isDark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionHeader(
+                  SectionHeader(
                     icon: Icons.wb_sunny_outlined,
                     label: 'Appearance',
                     iconColor: const Color(0xFF00B4DB),
@@ -153,7 +145,7 @@ class AppSettingsScreen extends StatelessWidget {
                   Text(
                     'Choose how NutriFit looks on your device.',
                     style: tt.bodySmall?.copyWith(
-                      color: scheme.onSurface.withOpacity(0.5),
+                      color: scheme.onSurface.withAlpha(120),
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -168,14 +160,14 @@ class AppSettingsScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        _ThemeToggleBtn(
+                        ThemeToggleBtn(
                           label: 'Light',
                           icon: Icons.wb_sunny_outlined,
                           isSelected: !settings.isDarkMode,
                           isDark: isDark,
                           onTap: () => settings.setDarkMode(false),
                         ),
-                        _ThemeToggleBtn(
+                        ThemeToggleBtn(
                           label: 'Dark',
                           icon: Icons.nightlight_round,
                           isSelected: settings.isDarkMode,
@@ -192,12 +184,12 @@ class AppSettingsScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             // ── Notifications card ────────────────────────────────────────────
-            _SectionCard(
+            SectionCard(
               isDark: isDark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionHeader(
+                  SectionHeader(
                     icon: Icons.notifications_outlined,
                     label: 'Notifications',
                     iconColor: scheme.secondary,
@@ -207,7 +199,7 @@ class AppSettingsScreen extends StatelessWidget {
                   Text(
                     'Adjust alert frequency for activity updates.',
                     style: tt.bodySmall?.copyWith(
-                      color: scheme.onSurface.withOpacity(0.5),
+                      color: scheme.onSurface.withAlpha(120),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -222,7 +214,7 @@ class AppSettingsScreen extends StatelessWidget {
                         overlayRadius: 14,
                       ),
                       activeTrackColor: scheme.primary,
-                      inactiveTrackColor: scheme.primary.withOpacity(0.15),
+                      inactiveTrackColor: scheme.primary.withAlpha(38),
                       thumbColor: scheme.primary,
                     ),
                     child: Slider(
@@ -242,7 +234,7 @@ class AppSettingsScreen extends StatelessWidget {
                             (label) => Text(
                               label,
                               style: tt.labelSmall?.copyWith(
-                                color: scheme.onSurface.withOpacity(0.4),
+                                color: scheme.onSurface.withAlpha(120),
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.8,
                                 fontSize: 10,
@@ -259,12 +251,12 @@ class AppSettingsScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             // ── Security & account card ───────────────────────────────────────
-            _SectionCard(
+            SectionCard(
               isDark: isDark,
               child: Column(
                 children: [
                   // Two-Factor Auth
-                  _AccountTile(
+                  AccountTile(
                     icon: Icons.security_outlined,
                     iconColor: const Color(0xFF00B4DB),
                     title: 'Two-Factor Authentication',
@@ -279,10 +271,10 @@ class AppSettingsScreen extends StatelessWidget {
                     ),
                     onTap: () {},
                   ),
-                  _Divider(isDark: isDark),
+                  AppDivider(isDark: isDark),
 
                   // Change Password
-                  _AccountTile(
+                  AccountTile(
                     icon: Icons.lock_outline_rounded,
                     iconColor: const Color(0xFF6A3DE8),
                     title: 'Change Password',
@@ -290,13 +282,13 @@ class AppSettingsScreen extends StatelessWidget {
                     isDark: isDark,
                     trailing: Icon(
                       Icons.chevron_right_rounded,
-                      color: scheme.onSurface.withOpacity(0.3),
+                      color: scheme.onSurface.withAlpha(120),
                     ),
                     onTap: () {},
                   ),
-                  _Divider(isDark: isDark),
+                  AppDivider(isDark: isDark),
                   // Log Out
-                  _AccountTile(
+                  AccountTile(
                     icon: Icons.logout_rounded,
                     iconColor: Colors.red,
                     title: 'Log Out',
@@ -315,9 +307,9 @@ class AppSettingsScreen extends StatelessWidget {
             // ── Version footer ────────────────────────────────────────────────
             Center(
               child: Text(
-                'NUTRIFIT AI V1.0.0 • BUILD 1001',
+                'SnackTrack V1.0.0 • BUILD 1001',
                 style: tt.labelSmall?.copyWith(
-                  color: scheme.onSurface.withOpacity(0.3),
+                  color: scheme.onSurface.withAlpha(120),
                   letterSpacing: 1.2,
                   fontSize: 10,
                 ),
@@ -328,232 +320,6 @@ class AppSettingsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// ── Section card wrapper ───────────────────────────────────────────────────────
-class _SectionCard extends StatelessWidget {
-  final Widget child;
-  final bool isDark;
-  const _SectionCard({required this.child, required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A2236) : Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-      ),
-      child: child,
-    );
-  }
-}
-
-// ── Section header (icon + title) ─────────────────────────────────────────────
-class _SectionHeader extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color iconColor;
-  final bool isDark;
-  const _SectionHeader({
-    required this.icon,
-    required this.label,
-    required this.iconColor,
-    required this.isDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 34,
-          height: 34,
-          decoration: BoxDecoration(
-            color: iconColor.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: iconColor, size: 18),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          label,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Theme toggle button ────────────────────────────────────────────────────────
-class _ThemeToggleBtn extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final bool isDark;
-  final VoidCallback onTap;
-  const _ThemeToggleBtn({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.isDark,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? (isDark ? const Color(0xFF1A2236) : Colors.white)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(9),
-            boxShadow: isSelected && !isDark
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 15,
-                color: isSelected
-                    ? scheme.primary
-                    : scheme.onSurface.withOpacity(0.4),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: isSelected
-                      ? scheme.onSurface
-                      : scheme.onSurface.withOpacity(0.4),
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Account tile ───────────────────────────────────────────────────────────────
-class _AccountTile extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String title;
-  final String subtitle;
-  final Widget trailing;
-  final bool isDark;
-  final Color? titleColor;
-  final VoidCallback onTap;
-
-  const _AccountTile({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.subtitle,
-    required this.trailing,
-    required this.isDark,
-    required this.onTap,
-    this.titleColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(icon, color: iconColor, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: tt.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: titleColor,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: tt.bodySmall?.copyWith(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.45),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              trailing,
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Divider ────────────────────────────────────────────────────────────────────
-class _Divider extends StatelessWidget {
-  final bool isDark;
-  const _Divider({required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      height: 1,
-      color: isDark
-          ? Colors.white.withOpacity(0.06)
-          : Colors.black.withOpacity(0.06),
     );
   }
 }

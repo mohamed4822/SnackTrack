@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:health_assistant/views/settings/privacy_screen.dart';
-import 'package:health_assistant/views/settings/support_screen.dart';
+import 'package:health_assistant/core/widgets/custom_button.dart';
+import 'package:health_assistant/views/accessibility/accessibility_screen.dart';
+import 'package:health_assistant/views/profile/widgets/menu_item.dart';
+import 'package:health_assistant/views/profile/widgets/stat_card.dart';
+import 'package:health_assistant/views/privacy/privacy_screen.dart';
+import 'package:health_assistant/views/support/support_screen.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/profile_controller.dart';
 import '../../controllers/auth_controller.dart';
@@ -15,7 +19,6 @@ class ProfileScreen extends StatelessWidget {
     final auth = context.read<AuthController>();
     final scheme = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: SafeArea(
@@ -102,15 +105,14 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // ── Stats row — IntrinsicHeight makes both cards equal height ────
+            // ── Stats row ────
             IntrinsicHeight(
               child: Row(
-                crossAxisAlignment:
-                    CrossAxisAlignment.stretch, // ← stretch to tallest
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Active Streak
                   Expanded(
-                    child: _StatCard(
+                    child: StatCard(
                       label: 'ACTIVE STREAK',
                       labelColor: scheme.primary,
                       child: Column(
@@ -160,7 +162,7 @@ class ProfileScreen extends StatelessWidget {
 
                   // Total Tracked
                   Expanded(
-                    child: _StatCard(
+                    child: StatCard(
                       label: 'TOTAL TRACKED',
                       labelColor: scheme.secondary,
                       hasBorder: true,
@@ -209,8 +211,8 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // ── Menu items — Material + InkWell fixes tap detection ──────────
-            _MenuItem(
+            // ── Menu items —
+            MenuItem(
               icon: Icons.settings_outlined,
               label: 'Settings',
               iconColor: scheme.primary,
@@ -220,17 +222,27 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            _MenuItem(
+            MenuItem(
+              icon: Icons.accessibility_new_outlined,
+              label: 'Accessibility',
+              iconColor: scheme.primary,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AccessibilityScreen()),
+              ),
+            ),
+            const SizedBox(height: 10),
+            MenuItem(
               icon: Icons.shield_outlined,
               label: 'Privacy',
-              iconColor: scheme.secondary,
+              iconColor: scheme.primary,
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const DataPrivacyScreen()),
               ),
             ),
             const SizedBox(height: 10),
-            _MenuItem(
+            MenuItem(
               icon: Icons.help_outline_rounded,
               label: 'Support',
               iconColor: scheme.primary,
@@ -243,139 +255,16 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 32),
 
             // ── Logout ───────────────────────────────────────────────────────
-            OutlinedButton.icon(
+            CustomButton(
+              icon: Icons.logout_rounded,
+              label: 'Logout',
               onPressed: auth.logout,
-              icon: const Icon(
-                Icons.logout_rounded,
-                color: Colors.red,
-                size: 20,
-              ),
-              label: const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.red, width: 1),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
+              outlined: true,
+              color: Colors.red,
             ),
 
             const SizedBox(height: 16),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Stat card ──────────────────────────────────────────────────────────────────
-class _StatCard extends StatelessWidget {
-  final String label;
-  final Color labelColor;
-  final Widget child;
-  final bool hasBorder;
-  final Color? borderColor;
-
-  const _StatCard({
-    required this.label,
-    required this.labelColor,
-    required this.child,
-    this.hasBorder = false,
-    this.borderColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1A2236) : Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: hasBorder
-            ? Border.all(color: borderColor ?? Colors.transparent, width: 1.5)
-            : null,
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withAlpha(20),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: labelColor,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.8,
-            ),
-          ),
-          const SizedBox(height: 8),
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-// ── Menu item — Material + InkWell for reliable tap ───────────────────────────
-class _MenuItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color iconColor;
-  final VoidCallback onTap;
-
-  const _MenuItem({
-    required this.icon,
-    required this.label,
-    required this.iconColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Material(
-      // ← Material needed for InkWell
-      color: isDark ? const Color(0xFF1A2236) : Colors.white,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        // ← InkWell is reliably tappable
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(icon, color: iconColor, size: 22),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: Colors.grey.withAlpha(150),
-                size: 20,
-              ),
-            ],
-          ),
         ),
       ),
     );
