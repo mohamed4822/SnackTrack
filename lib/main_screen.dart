@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:health_assistant/core/widgets/ai_coach_fab.dart';
+import 'package:health_assistant/views/notufucations/notifications_screen.dart';
 import 'core/constants/app_routes.dart';
 import 'core/widgets/bottom_nav_bar.dart';
 import 'views/dashboard/dashboard_screen.dart';
@@ -57,11 +59,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(
-          context,
-        ).scaffoldBackgroundColor, 
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        scrolledUnderElevation: 0, 
+        scrolledUnderElevation: 0,
         leading: Container(
           margin: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
           decoration: BoxDecoration(
@@ -76,9 +76,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         title: Text(
           'SnakeTrack',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Theme.of(
-              context,
-            ).colorScheme.primary, 
+            color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -86,11 +84,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           IconButton(
             icon: Icon(
               Icons.notifications_none_outlined,
-              color: Theme.of(
-                context,
-              ).colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+            ),
           ),
           const SizedBox(width: 10),
         ],
@@ -101,63 +100,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       // ── Floating Action Button → AI Coach ──────────────────────────────────
       floatingActionButton: ScaleTransition(
         scale: _fabScale,
-        child: _AiCoachFab(),
+        child: AiCoachFab(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
       bottomNavigationBar: BottomNavBar(
         currentIndex: _current,
         onTap: (item) => setState(() => _current = item),
-      ),
-    );
-  }
-}
-
-// ─── AI Coach FAB ─────────────────────────────────────────────────────────────
-class _AiCoachFab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return GestureDetector(
-      onTap: () => context.push(AppRoutes.aiCoach),
-      child: Container(
-        height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [scheme.primary, scheme.secondary],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: scheme.primary.withAlpha(100),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.psychology_outlined,
-              color: Colors.white,
-              size: 22,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'AI Coach',
-              style: tt.labelLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

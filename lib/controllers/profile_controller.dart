@@ -6,10 +6,22 @@ class ProfileController extends ChangeNotifier {
   UserModel? profile;
   bool isLoading = false;
 
-  void loadFromStorage() {
-    final data = StorageService.getUser();
-    if (data != null) {
-      profile = UserModel.fromJson(Map<String, dynamic>.from(data));
+  ProfileController() {
+    loadFromStorage();
+  }
+
+  Future<void> loadFromStorage() async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      final data = StorageService.getUser();
+      if (data != null) {
+        profile = UserModel.fromJson(Map<String, dynamic>.from(data));
+      }
+    } catch (e) {
+      // Handle error silently or log if needed
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

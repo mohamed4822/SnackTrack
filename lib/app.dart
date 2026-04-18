@@ -14,6 +14,7 @@ import 'core/network/dio_client.dart';
 import 'services/auth_service.dart';
 import 'services/meal_service.dart';
 import 'services/ai_service.dart';
+import 'services/storage_service.dart';
 import 'views/splash/splash_screen.dart';
 import 'views/auth/auth_screen.dart';
 import 'views/ai/ai_coach_screen.dart';
@@ -29,24 +30,32 @@ class App extends StatelessWidget {
     final authService = AuthService(dio);
     final mealService = MealService(dio);
     final aiService = AiService(dio);
+    final storageService = StorageService();
 
     return MultiProvider(
       providers: [
+        // Auth
         ChangeNotifierProvider(create: (_) => AuthController(authService)),
+        // Meal
         ChangeNotifierProvider(create: (_) => MealController(mealService)),
+        // Dashboard
         ChangeNotifierProvider(create: (_) => DashboardController(mealService)),
+        // AI Coach
         ChangeNotifierProvider(create: (_) => AiController(aiService)),
+        // Profile
         ChangeNotifierProvider(create: (_) => ProfileController()),
+        // History
         ChangeNotifierProvider(create: (_) => HistoryController(mealService)),
+        // Settings
         ChangeNotifierProvider(create: (_) => SettingsController()),
       ],
       child: Consumer<SettingsController>(
         builder: (context, settings, _) => MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          title:        'NutriFit AI',
+          title:        'SnackTrack',
           theme:        AppTheme.light,
           darkTheme:    AppTheme.dark,
-          themeMode:    settings.isDarkMode ? ThemeMode.dark : ThemeMode.light, // ← THIS
+          themeMode:    settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           routerConfig: _router,
         )
       ),
