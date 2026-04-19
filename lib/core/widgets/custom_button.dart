@@ -6,14 +6,16 @@ class CustomButton extends StatelessWidget {
   final bool isLoading;
   final bool outlined;
   final Color? color;
+  final IconData? icon;
 
   const CustomButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
-    this.outlined  = false, 
+    this.outlined = false,
     this.color,
+    this.icon,
   });
 
   @override
@@ -27,7 +29,9 @@ class CustomButton extends StatelessWidget {
               onPressed: isLoading ? null : onPressed,
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: color ?? primary),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               child: _child(color ?? primary),
             )
@@ -36,7 +40,9 @@ class CustomButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: color ?? primary,
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               child: _child(Colors.black),
             ),
@@ -44,6 +50,23 @@ class CustomButton extends StatelessWidget {
   }
 
   Widget _child(Color color) => isLoading
-      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: color, strokeWidth: 2))
-      : Text(label, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: color));
+      ? SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(color: color, strokeWidth: 2),
+        )
+      : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon , size: 18, color: color),
+            Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                color: color,
+              ),
+            ),
+          ],
+        );
 }

@@ -20,14 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     final token = StorageService.getToken();
-    context.go(token != null ? AppRoutes.main : AppRoutes.profile);
+    context.go(token != null ? AppRoutes.main : AppRoutes.main);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('NutriFit AI', style: Theme.of(context).textTheme.displayLarge),
+        child: Text(
+          'NutriFit AI',
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
       ),
     );
   }
